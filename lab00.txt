@@ -1,0 +1,37 @@
+(lab00.png)
+Analisi statica basica iniziale mostra che viene importato `kernel32.dll`.
+
+(lab01.png)
+Utilizzo `Process Monitor` e filtro per nome di quello che penso essere un malware.
+Inizialmente controllo le azioni che esso compie a livello di processi e thread. Vedo che crea a sua volta
+un processo `svchost.exe`.
+
+(lab02.png)
+Dopo aver filtrato per PID del processo che il malware ha generato controllo se questo
+ha generato ulteriori processi, ma non sembra il caso.
+
+(lab03.png)
+Controllo modifiche a livello del file system effettuate dal malware e vedo che ha acceduto, tra altri, al file
+`system32/svchost.exe`. Consistente con `lab01.png`.
+
+(lab04.png)
+Modifico il filtro e controllo cosa `svchost.exe` ha modificato a livello di filesystem.
+Individuo un file `practicalmalwareanalysis.log` nella cartelle del malware.
+
+(lab05.png)
+Apro il file e individuo tante stringhe "[TAB]", forse dovute al fatto che, quando cambio finestra, spesso utilizzo
+la scorciatoia `ALT+TAB`.
+
+(lab06.png)
+Mi muovo un po' a caso e infine premo i caratteri "xz". Riapro il file di log e vedo "[TAB]xz".
+
+Deduco quindi che il malware si nasconda come `svchost.exe` per avviare un keylogger/spyware, che salva successivamente i file
+nella cartella sul `Desktop`.
+
+(lab08.png)
+Utilizzo infine `pestudio` per far verificare il file a `VirusTotal`.
+Questo procedimento avrei dovuto svolgerlo all'inizio dell'analisi statica, ma per evitare problemi di bias
+durante l'esercizio lo effettuo solamente ora.
+`Alibaba` lo identifica come keylogger, altrimenti viene, più generalmente, classificato come `Trojan`.
+`pestudio` dice inoltre che all'interno del malware è presente un secondo file. Deduco che quello riconosciuto come
+file all'interno del malware corrisponda a del codice che va a inserirsi nel file `svchost.exe`.
